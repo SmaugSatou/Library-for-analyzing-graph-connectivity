@@ -2,173 +2,148 @@
 Graphs Library
 """
 
-class Graph:
-    def __init__(self, adjacency_list: dict[int, list[int]]) -> None:
-        self.adjacency_list = adjacency_list
+from collections import defaultdict
 
-    def __convert_to_adjacency_list(self, vertices: list[tuple[int, int]]) -> dict[int, list[int]]:
-        """Converts a list of edges into an adjacency list for an undirected graph.
+def convert_to_adjacency_list(vertices: list[tuple[int, int]], \
+                               is_directed: bool) -> dict[int, list[int]]:
+    """Converts a list of edges into an adjacency list for an undirected graph.
 
-        Args:
-            vertices (list[tuple[int, int]]): The list of edges.
+    Args:
+        vertices (list[tuple[int, int]]): The list of edges.
 
-        Returns:
-            dict[int, list[int]]: The adjacency list of the graph.
-        """
-        pass
+    Returns:
+        dict[int, list[int]]: The adjacency list of the graph.
+    """
 
-    @staticmethod
-    def read_file(pathname: str) -> dict[int, list[int]]:
-        """Reads a graph from a file and assigns it to the private variable.
+    new_adjacency_list = defaultdict(list)
 
-        Args:
-            pathname (str): The name of the file to read.
+    for v1, v2 in vertices:
+        new_adjacency_list[v1].append(v2)
+        if not is_directed:
+            new_adjacency_list[v2].append(v1)
 
-        Returns:
-            dict[int, list[int]]: The adjacency list of the graph.
-        """
-        pass
+    return new_adjacency_list
 
+def read_file(pathname: str) -> dict[int, list[int]]:
+    """Reads a graph from a file and assigns it to the private variable.
 
-    def write_file(self, pathname: str) -> bool:
-        """Writes the graph into a file.
+    Args:
+        pathname (str): The name of the file to read.
 
-        Args:
-            pathname (str): The name of the file to write.
+    Returns:
+        dict[int, list[int]]: The adjacency list of the graph.
+    """
+    pass
 
-        Returns:
-            bool: True if the operation is successful, False otherwise.
-        """
-        pass
+def write_file(pathname: str, adjacency_list: dict[int, list[int]]) -> bool:
+    """Writes the graph into a file.
 
-    def get_adjacency_list(self) -> dict[int, list[int]]:
-        """Returns the private adjacency list variable.
+    Args:
+        pathname (str): The name of the file to write.
 
-        Returns:
-            dict[int, list[int]]: The adjacency list of the graph.
-        """
-        return self.adjacency_list
+    Returns:
+        bool: True if the operation is successful, False otherwise.
+    """
+    pass
 
+def search_component_connectivity(adjacency_list: dict[int, list[int]]) -> list[int]:
+    """Searches for connected components in the graph.
 
-class UndirectedGraph(Graph):
-    def __init__(self, adjacency_list: dict[int, list[int]]):
-        super().__init__(adjacency_list)
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+        Defaults to the private variable if None.
 
-    def search_component_connectivity(self) -> list[int]:
-        """Searches for connected components in the graph.
+    Returns:
+        list[int]: The smallest vertices of each connected component.
+    """
+    pass
 
-        Args:
-            adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
-            Defaults to the private variable if None.
+def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]]:
+    """Searches for bridges in the graph.
 
-        Returns:
-            list[int]: The smallest vertices of each connected component.
-        """
-        pass
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+        Defaults to the private variable if None.
 
-    def search_bridges(self) -> list[tuple[int, int]]:
-        """Searches for bridges in the graph.
+    Returns:
+        list[tuple[int, int]]: The edges of the graph that are bridges.
+    """
+    pass
 
-        Args:
-            adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
-            Defaults to the private variable if None.
+def __dfs(adjacency_list: dict[int, list[int]],
+        node: int, visited: set | None = None) -> set:
+    """
+    Implements the DFS algorithm.
 
-        Returns:
-            list[tuple[int, int]]: The edges of the graph that are bridges.
-        """
-        pass
+    :param adjacency_list: dict[int, list[int]], The graph we want go through.
+    :param node: int, The node you are starting with.
+    :param visited: set | None, Set of visited nodes.
 
-    def __dfs(self, adjacency_list: dict[int, list[int]],
-            node: int, visited: set | None = None) -> set:
-        """
-        Implements the DFS algorithm.
+    :return: set, All visited nodes from a whole graph.
+    """
+    if visited is None:
+        visited = set()
 
-        :param adjacency_list: dict[int, list[int]], The graph we want go through.
-        :param node: int, The node you are starting with.
-        :param visited: set | None, Set of visited nodes.
+    if node not in visited:
+        visited.add(node)
+        for next_el in adjacency_list.get(node):
+            __dfs(adjacency_list, next_el, visited)
 
-        :return: set, All visited nodes from a whole graph.
-        """
-        if visited is None:
-            visited = set()
+    return visited
 
-        if node not in visited:
-            visited.add(node)
-            for next_el in adjacency_list.get(node):
-                self.__dfs(adjacency_list, next_el, visited)
+def search_points_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]:
+    """Searches for articulation points (points of connectivity) in the graph.
 
-        return visited
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+        Defaults to the private variable if None.
 
-    def search_points_connectivity(self) -> set[int]:
-        """Searches for articulation points (points of connectivity) in the graph.
+    Returns:
+        list[int]: The vertices that are points of connectivity.
 
-        Args:
-            adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
-            Defaults to the private variable if None.
+    Examples:
+    >>> search_points_connectivity({\
+    5: [3, 7], \
+    7: [8, 5], \
+    2: [3, 6], \
+    3: [2, 4, 5], \
+    6: [2], \
+    4: [8, 3], \
+    8: [7, 4]}) == {2, 3}
+    True
 
-        Returns:
-            list[int]: The vertices that are points of connectivity.
+    >>> search_points_connectivity({\
+0: [1, 2],\
+1: [0, 2, 5],\
+2: [0, 1, 5],\
+3: [4, 5],\
+4: [3, 5],\
+5: [1, 2, 3, 4]}) == {5}
+    True
+    """
+    adjacency_dfs = __dfs(adjacency_list, list(adjacency_list.keys())[0])
+    output = set()
 
-        Examples:
-        >>> UndirectedGraph({\
-        5: [3, 7], \
-        7: [8, 5], \
-        2: [3, 6], \
-        3: [2, 4, 5], \
-        6: [2], \
-        4: [8, 3], \
-        8: [7, 4]}).search_points_connectivity() == {2, 3}
-        True
+    for node in adjacency_list:
+        new_adjacency = {key: values for key, values in adjacency_list.items()
+                            if key != node}
 
-        >>> UndirectedGraph({\
-    0: [1, 2],\
-    1: [0, 2, 5],\
-    2: [0, 1, 5],\
-    3: [4, 5],\
-    4: [3, 5],\
-    5: [1, 2, 3, 4]}\
-        ).search_points_connectivity() == {5}
-        True
-        """
-        adjacency_dfs = self.__dfs(self.adjacency_list, list(self.adjacency_list.keys())[0])
-        output = set()
+        for k in new_adjacency:
+            new_adjacency[k] = [i for i in new_adjacency.get(k) if i != node]
 
-        for node in self.adjacency_list:
-            new_adjacency = {key: values for key, values in self.adjacency_list.items()
-                             if key != node}
+        if len(__dfs(new_adjacency, list(new_adjacency.keys())[0])) < len(adjacency_dfs) - 1:
+            output.add(node)
 
-            for k in new_adjacency:
-                new_adjacency[k] = [i for i in new_adjacency.get(k) if i != node]
+    return output
 
-            if len(self.__dfs(new_adjacency, list(new_adjacency.keys())[0])) < len(adjacency_dfs) - 1:
-                output.add(node)
+def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -> list[int]:
+    """Searches for strongly connected components in the graph.
 
-        return output
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+        Defaults to the private variable if None.
 
-
-class DirectedGraph(Graph):
-    def __init__(self, adjacency_list: dict[int, list[int]]):
-        super().__init__(adjacency_list)
-
-    def __convert_to_adjacency_list(self, vertices: list[tuple[int, int]]) -> dict[int, list[int]]:
-        """Converts a list of edges into an adjacency list for a directed graph.
-
-        Args:
-            vertices (list[tuple[int, int]]): The list of edges.
-
-        Returns:
-            dict[int, list[int]]: The adjacency list of the graph.
-        """
-        pass
-
-    def search_component_strong_connectivity(self) -> list[int]:
-        """Searches for strongly connected components in the graph.
-
-        Args:
-            adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
-            Defaults to the private variable if None.
-
-        Returns:
-            list[int]: The smallest vertices of each strongly connected component.
-        """
-        pass
+    Returns:
+        list[int]: The smallest vertices of each strongly connected component.
+    """
+    pass

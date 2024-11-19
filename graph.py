@@ -74,6 +74,27 @@ class UndirectedGraph(Graph):
         """
         pass
 
+    def dfs(self, adjacency_list: dict[int, list[int]],
+            node: int, visited: set | None = None) -> set:
+        """
+        Implements the DFS algorithm.
+
+        :param adjacency_list: dict[int, list[int]], The graph we want go through.
+        :param node: int, The node you are starting with.
+        :param visited: set | None, Set of visited nodes.
+
+        :return: set, All visited nodes from a whole graph.
+        """
+        if visited is None:
+            visited = set()
+
+        if node not in visited:
+            visited.add(node)
+            for next_el in adjacency_list.get(node):
+                self.dfs(adjacency_list, next_el, visited)
+
+        return visited
+
     def search_points_connectivity(self, adjacency_list: dict[int, list[int]] = None) -> list[int]:
         """Searches for articulation points (points of connectivity) in the graph.
 
@@ -83,8 +104,42 @@ class UndirectedGraph(Graph):
 
         Returns:
             list[int]: The vertices that are points of connectivity.
+
+        Examples:
+        >>> UndirectedGraph().search_points_connectivity({\
+        5: [3, 7], \
+        7: [8, 5], \
+        2: [3, 6], \
+        3: [2, 4, 5], \
+        6: [2], \
+        4: [8, 3], \
+        8: [7, 4]})
+        [2, 3]
+
+        >>> UndirectedGraph().search_points_connectivity({\
+    0: [1, 2],\
+    1: [0, 2, 5],\
+    2: [0, 1, 5],\
+    3: [4, 5],\
+    4: [3, 5],\
+    5: [1, 2, 3, 4]})
+        [5]
         """
-        pass
+        adjacency_dfs = self.dfs(adjacency_list, list(adjacency_list.keys())[0])
+        output = []
+
+        for node in adjacency_list:
+            new_adjacency = {key: values for key, values in adjacency_list.items()
+                             if key != node}
+
+            for k in new_adjacency:
+                new_adjacency[k] = [i for i in new_adjacency.get(k) if i != node]
+
+            if len(self.dfs(new_adjacency, list(new_adjacency.keys())[0])) < len(adjacency_dfs) - 1:
+                output += [node]
+
+        return output
+
 
 class DirectedGraph(Graph):
     def __convert_to_adjacency_list(self, vertices: list[tuple[int, int]]) -> dict[int, list[int]]:

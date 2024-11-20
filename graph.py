@@ -2,8 +2,10 @@
 Graphs Library
 """
 
-def convert_to_adjacency_list(vertices: list[tuple[int, int]], \
-                               is_directed: bool) -> dict[int, list[int]]:
+
+def convert_to_adjacency_list(
+    vertices: list[tuple[int, int]], is_directed: bool
+) -> dict[int, list[int]]:
     """Converts a list of edges into an adjacency list for an undirected graph.
 
     Args:
@@ -55,6 +57,7 @@ def convert_to_adjacency_list(vertices: list[tuple[int, int]], \
 
     return new_adjacency_list
 
+
 def read_file(pathname: str) -> dict[int, list[int]]:
     """Reads a graph from a file and assigns it to the private variable.
 
@@ -65,6 +68,7 @@ def read_file(pathname: str) -> dict[int, list[int]]:
         dict[int, list[int]]: The adjacency list of the graph.
     """
     pass
+
 
 def write_file(pathname: str, adjacency_list: dict[int, list[int]]) -> bool:
     """Writes the graph into a file.
@@ -77,16 +81,6 @@ def write_file(pathname: str, adjacency_list: dict[int, list[int]]) -> bool:
     """
     pass
 
-def search_component_connectivity(adjacency_list: dict[int, list[int]]) -> list[int]:
-    """Searches for connected components in the graph.
-
-    Args:
-        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
-
-    Returns:
-        list[int]: The smallest vertices of each connected component.
-    """
-    pass
 
 def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]]:
     """Searches for bridges in the graph.
@@ -99,8 +93,10 @@ def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]
     """
     pass
 
-def __dfs(adjacency_list: dict[int, list[int]],
-        node: int, visited: set | None = None) -> set:
+
+def __dfs(
+    adjacency_list: dict[int, list[int]], node: int, visited: set | None = None
+) -> set:
     """
     Implements the DFS algorithm.
 
@@ -117,8 +113,66 @@ def __dfs(adjacency_list: dict[int, list[int]],
         visited.add(node)
         for next_el in adjacency_list.get(node):
             __dfs(adjacency_list, next_el, visited)
-
     return visited
+
+
+def orientation_check(adjacency_list: dict[int, list[int]]) -> True:
+    """
+    Checks if graph is oriented.
+
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+
+    Returns:
+        True if graph is oriented, False if not.
+
+    >>> orientation_check({1: [2], 2: [3, 4], 3: [4, 6],\
+ 4: [1, 5], 5: [6], 6: [7], 7: [5]})
+    True
+    >>> orientation_check({0: [1, 2], 1: [0, 2], 2: [0,1], 3: [4], 4: [3]})
+    False
+    """
+    for i in adjacency_list:
+        for g in adjacency_list[i]:
+            if not i in adjacency_list[g]:
+                return True
+    return False
+
+
+def search_component_connectivity(
+    adjacency_list: dict[int, list[int]] | None = None
+) -> list[int]:
+    """Searches for connected components in the graph.
+
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+
+    Returns:
+        list[int]: The smallest vertices of each connected component.
+
+    >>> search_component_connectivity({0: [1, 2], 1: [0, 2], 2: [0, 1], 3: [4], 4: [3]})
+    [0, 3]
+    >>> search_component_connectivity({0: [1], 1: [0,2,4], 2: [1,3], 3: [2,5],\
+ 4: [1,6,7], 5: [3,6], 6: [4,5], 7: [4], 8:[9], 9:[8,10,11], 10:[9], 11:[9]})
+    [0, 8]
+    >>> search_component_connectivity({1: [2], 2: [3, 4], 3: [4, 6],\
+ 4: [1, 5], 5: [6], 6: [7], 7: [5]})
+    'Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()'
+    """
+    if orientation_check(adjacency_list):
+        return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
+
+    closed = []
+    component = []
+    faded = []
+    for i in adjacency_list:
+        if i in closed:
+            continue
+        faded = __dfs(adjacency_list, i)
+        component.append(min(faded))
+        closed += list(faded)
+    return component
+
 
 def search_points_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]:
     """Searches for articulation points (points of connectivity) in the graph.
@@ -153,18 +207,25 @@ def search_points_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]
     output = set()
 
     for node in adjacency_list:
-        new_adjacency = {key: values for key, values in adjacency_list.items()
-                            if key != node}
+        new_adjacency = {
+            key: values for key, values in adjacency_list.items() if key != node
+        }
 
         for k in new_adjacency:
             new_adjacency[k] = [i for i in new_adjacency.get(k) if i != node]
 
-        if len(__dfs(new_adjacency, list(new_adjacency.keys())[0])) < len(adjacency_dfs) - 1:
+        if (
+            len(__dfs(new_adjacency, list(new_adjacency.keys())[0]))
+            < len(adjacency_dfs) - 1
+        ):
             output.add(node)
 
     return output
 
-def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]:
+
+def search_component_strong_connectivity(
+    adjacency_list: dict[int, list[int]]
+) -> set[int]:
     """Searches for strongly connected components in the graph.
 
     Args:
@@ -188,9 +249,14 @@ def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -
         True
     """
 
-    def dfs_find_path_to_vertice(curr_vert: int, adj_list: dict[int, list[int, int]], \
-        visited_vert: list[int], start_vert: int, dest_vert: int) -> bool:
-        """ Depth first search to find a path between starting vertice to destination vertice.
+    def dfs_find_path_to_vertice(
+        curr_vert: int,
+        adj_list: dict[int, list[int, int]],
+        visited_vert: list[int],
+        start_vert: int,
+        dest_vert: int,
+    ) -> bool:
+        """Depth first search to find a path between starting vertice to destination vertice.
 
         Args:
             curr_vert (int): The current vertice.
@@ -209,13 +275,16 @@ def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -
 
         for next_vert in adj_list[curr_vert]:
             if not visited_vert[next_vert]:
-                if dfs_find_path_to_vertice(next_vert, adj_list, \
-                    visited_vert, start_vert, dest_vert):
+                if dfs_find_path_to_vertice(
+                    next_vert, adj_list, visited_vert, start_vert, dest_vert
+                ):
                     return True
 
         return False
 
-    def is_connection(adj_list: dict[int, list[int, int]], vert_1: int, vert_2 : int) -> bool:
+    def is_connection(
+        adj_list: dict[int, list[int, int]], vert_1: int, vert_2: int
+    ) -> bool:
         """Checks whether there is a path between vertice 1 to vertice 2.
 
         Args:
@@ -227,7 +296,9 @@ def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -
         """
         visited_vertices = [False] * (len(adj_list) + 1)
 
-        return dfs_find_path_to_vertice(vert_1, adj_list, visited_vertices, vert_1, vert_2)
+        return dfs_find_path_to_vertice(
+            vert_1, adj_list, visited_vertices, vert_1, vert_2
+        )
 
     number_of_vertices = len(adjacency_list)
 
@@ -241,9 +312,11 @@ def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -
             curr_component = [vertice_1]
 
             for vertice_2 in range(vertice_1 + 1, number_of_vertices + 1):
-                if not is_part_of_component[vertice_2] and \
-                    is_connection(adjacency_list, vertice_1, vertice_2) and \
-                        is_connection(adjacency_list, vertice_2, vertice_1):
+                if (
+                    not is_part_of_component[vertice_2]
+                    and is_connection(adjacency_list, vertice_1, vertice_2)
+                    and is_connection(adjacency_list, vertice_2, vertice_1)
+                ):
                     is_part_of_component[vertice_2] = True
                     curr_component.append(vertice_2)
 
@@ -251,6 +324,8 @@ def search_component_strong_connectivity(adjacency_list: dict[int, list[int]]) -
 
     return strong_components_connectivity
 
+
 if __name__ == "__main__":
     import doctest
+
     print(doctest.testmod())

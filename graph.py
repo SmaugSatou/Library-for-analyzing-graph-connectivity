@@ -60,16 +60,40 @@ def convert_to_adjacency_list(
     return new_adjacency_list
 
 def read_file(pathname: str, is_directed: bool) -> dict[int, list[int]]:
-    """Reads a graph from a file and assigns it to the private variable.
-
+    """
+    Reads a graph from a file and returns its adjacency list.
     Args:
         pathname (str): The name of the file to read.
-
+        is_directed (bool): True if the graph is directed, False if undirected.
     Returns:
         dict[int, list[int]]: The adjacency list of the graph.
-        is_directed (bool): True if graph is directed. False if undirected.
+    Examples:
+        >>> read_file('test.txt', is_directed=False)
+        {1: [2], 2: [1, 3], 3: [2, 4], 4: [3]}
+
+        >>> read_file('test.txt', is_directed=True)
+        {1: [2], 2: [3], 3: [4]}
     """
-    pass
+    adjacency_list = {}
+    with open(pathname, mode='r', encoding='utf-8') as file:
+        for line in file:
+            line = line.strip()
+            if not line:
+                continue
+
+            vertices = line.split(',')
+            start, end = map(int, vertices)
+
+            if start not in adjacency_list:
+                adjacency_list[start] = []
+            adjacency_list[start].append(end)
+
+            if not is_directed:
+                if end not in adjacency_list:
+                    adjacency_list[end] = []
+                adjacency_list[end].append(start)
+    return adjacency_list
+
 
 def write_file(pathname: str, adjacency_list: dict[int, list[int]]) -> bool:
     """Writes the graph into a file.
@@ -80,7 +104,15 @@ def write_file(pathname: str, adjacency_list: dict[int, list[int]]) -> bool:
     Returns:
         bool: True if the operation is successful, False otherwise.
     """
-    pass
+    with open(pathname, mode='w', encoding='utf-8') as file:
+        written_edges = set()
+        for start, neighbors in adjacency_list.items():
+            for end in neighbors:
+                if (start, end) in written_edges or (end, start) in written_edges:
+                    continue
+                file.write(f"{start},{end}\n")
+                written_edges.add((start, end))
+    return True
 
 def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]]:
     """Searches for bridges in the graph.

@@ -43,3 +43,6 @@ def main():
         parser.error("Unknown command")
 
     print(result)
+
+if __name__ == "__main__":
+    main()

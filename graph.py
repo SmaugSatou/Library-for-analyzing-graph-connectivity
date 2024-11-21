@@ -74,7 +74,7 @@ def read_file(pathname: str, is_directed: bool) -> dict[int, list[int]]:
         >>> read_file('test.txt', is_directed=True)
         {1: [2], 2: [3], 3: [4]}
     """
-    adjacency_list = {}
+    edges = []
     with open(pathname, mode='r', encoding='utf-8') as file:
         for line in file:
             line = line.strip()
@@ -83,17 +83,9 @@ def read_file(pathname: str, is_directed: bool) -> dict[int, list[int]]:
 
             vertices = line.split(',')
             start, end = map(int, vertices)
+            edges.append((start, end))
 
-            if start not in adjacency_list:
-                adjacency_list[start] = []
-            adjacency_list[start].append(end)
-
-            if not is_directed:
-                if end not in adjacency_list:
-                    adjacency_list[end] = []
-                adjacency_list[end].append(start)
-    return adjacency_list
-
+    return convert_to_adjacency_list(edges, is_directed)
 
 def write_file(pathname: str, adjacency_list: dict[int, list[int]]) -> bool:
     """Writes the graph into a file.
@@ -131,6 +123,10 @@ def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]
     >>> search_bridges({0: [1, 2], 1: [0, 2], 2: [0, 1], 3: [4], 4: [3]}
     [(3, 4)]
     """
+
+    if orientation_check(adjacency_list):
+        return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
+
     bridges = []
 
     connectivity = search_component_connectivity(adjacency_list)
@@ -158,6 +154,28 @@ def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]
 
     return bridges
 
+def orientation_check(adjacency_list: dict[int, list[int]]) -> True:
+    """
+    Checks if graph is oriented.
+
+    Args:
+        adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
+
+    Returns:
+        True if graph is oriented, False if not.
+
+    >>> orientation_check({1: [2], 2: [3, 4], 3: [4, 6],\
+    4: [1, 5], 5: [6], 6: [7], 7: [5]})
+    True
+    >>> orientation_check({0: [1, 2], 1: [0, 2], 2: [0,1], 3: [4], 4: [3]})
+    False
+    """
+    for i in adjacency_list:
+        for g in adjacency_list[i]:
+            if not i in adjacency_list[g]:
+                return True
+    return False
+
 def __dfs(
         adjacency_list: dict[int, list[int]], node: int, visited: set | None = None
 ) -> set:
@@ -179,8 +197,7 @@ def __dfs(
             __dfs(adjacency_list, next_el, visited)
     return visited
 
-def search_component_connectivity(
-        adjacency_list: dict[int, list[int]] | None = None
+def search_component_connectivity(adjacency_list: dict[int, list[int]] | None = None
 ) -> list[int]:
     """Searches for connected components in the graph.
 
@@ -199,28 +216,6 @@ def search_component_connectivity(
  4: [1, 5], 5: [6], 6: [7], 7: [5]})
     'Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()'
     """
-
-    def orientation_check(adjacency_list: dict[int, list[int]]) -> True:
-        """
-        Checks if graph is oriented.
-
-        Args:
-            adjacency_list (dict[int, list[int]], optional): The adjacency list of the graph.
-
-        Returns:
-            True if graph is oriented, False if not.
-
-        >>> orientation_check({1: [2], 2: [3, 4], 3: [4, 6],\
-    4: [1, 5], 5: [6], 6: [7], 7: [5]})
-        True
-        >>> orientation_check({0: [1, 2], 1: [0, 2], 2: [0,1], 3: [4], 4: [3]})
-        False
-        """
-        for i in adjacency_list:
-            for g in adjacency_list[i]:
-                if not i in adjacency_list[g]:
-                    return True
-        return False
 
     if orientation_check(adjacency_list):
         return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
@@ -265,6 +260,10 @@ def search_points_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]
         5: [1, 2, 3, 4]}) == {5}
         True
     """
+
+    if orientation_check(adjacency_list):
+        return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
+
     adjacency_dfs = __dfs(adjacency_list, list(adjacency_list.keys())[0])
     output = set()
 

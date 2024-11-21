@@ -231,7 +231,8 @@ def search_component_connectivity(adjacency_list: dict[int, list[int]] | None = 
         closed += list(faded)
     return component
 
-def search_points_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]:
+def search_points_connectivity(adjacency_list: dict[int,
+    list[int]]) -> set[int] | str:
     """Searches for articulation points (points of connectivity) in the graph.
 
     Args:

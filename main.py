@@ -20,6 +20,8 @@ def main():
 
     parser.add_argument("graph_file", type=str, help="Path to the CSV file containing the vertices")
     parser.add_argument("--directed", action="store_true", help="Define if the graph is directed")
+    parser.add_argument("--output", type=str,
+                        help="Path to save the graph adjacency list as a file", default=None)
 
     args = parser.parse_args()
 
@@ -42,7 +44,13 @@ def main():
     else:
         parser.error("Unknown command")
 
-    print(result)
+    print(f'Result: {result}')
+
+    if args.output:
+        if g.write_file(args.output, adjacency_list):
+            print(f"Graph was written to {args.output}")
+        else:
+            print("Failed to write graph to file.")
 
 if __name__ == "__main__":
     main()

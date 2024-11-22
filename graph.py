@@ -68,11 +68,11 @@ def read_file(pathname: str, is_directed: bool) -> dict[int, list[int]]:
     Returns:
         dict[int, list[int]]: The adjacency list of the graph.
     Examples:
-        >>> read_file('test.txt', is_directed=False)
+        >>> read_file('test.csv', is_directed=False)
         {1: [2], 2: [1, 3], 3: [2, 4], 4: [3]}
 
-        >>> read_file('test.txt', is_directed=True)
-        {1: [2], 2: [3], 3: [4]}
+        >>> read_file('test.csv', is_directed=True)
+        {1: [2], 2: [3], 3: [4], 4: []}
     """
     edges = []
     with open(pathname, mode='r', encoding='utf-8') as file:
@@ -120,12 +120,12 @@ def search_bridges(adjacency_list: dict[int, list[int]]) -> list[tuple[int, int]
     [(0, 1), (4, 7), (8, 9), (9, 10), (9, 11)]
     >>> search_bridges({0: [1, 2], 1: [0, 2], 2: [0, 1]})
     []
-    >>> search_bridges({0: [1, 2], 1: [0, 2], 2: [0, 1], 3: [4], 4: [3]}
+    >>> search_bridges({0: [1, 2], 1: [0, 2], 2: [0, 1], 3: [4], 4: [3]})
     [(3, 4)]
     """
 
     if orientation_check(adjacency_list):
-        return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
+        return "Graph should be undirected"
 
     bridges = []
 
@@ -214,11 +214,11 @@ def search_component_connectivity(adjacency_list: dict[int, list[int]] | None = 
     [0, 8]
     >>> search_component_connectivity({1: [2], 2: [3, 4], 3: [4, 6],\
  4: [1, 5], 5: [6], 6: [7], 7: [5]})
-    'Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()'
+    'Graph should be undirected'
     """
 
     if orientation_check(adjacency_list):
-        return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
+        return "Graph should be undirected"
 
     closed = []
     component = []
@@ -262,7 +262,7 @@ def search_points_connectivity(adjacency_list: dict[int, list[int]]) -> set[int]
     """
 
     if orientation_check(adjacency_list):
-        return "Граф є орієнтованим. Скористайтесь функцією search_component_strong_connectivity()"
+        return "Graph should be undirected"
 
     adjacency_dfs = __dfs(adjacency_list, list(adjacency_list.keys())[0])
     output = set()

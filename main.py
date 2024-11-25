@@ -4,6 +4,9 @@ Demonstration program
 
 import argparse
 
+import matplotlib.pyplot as plt
+import networkx as nx
+
 import graph as g
 
 def main():
@@ -17,7 +20,8 @@ def main():
         "search-bridges",
         "search-component-connectivity",
         "search-points-connectivity",
-        "search-component-strong-connectivity"
+        "search-component-strong-connectivity",
+        "represent-graph"
     ], help="Functions to perform")
 
     parser.add_argument("graph_file", type=str, help="Path to the CSV file containing the vertices")
@@ -35,18 +39,35 @@ def main():
 
     result = ''
 
-    if args.function == "search-bridges":
-        result = g.search_bridges(adjacency_list)
-    elif args.function == "search-component-connectivity":
-        result = g.search_component_connectivity(adjacency_list)
-    elif args.function == "search-points-connectivity":
-        result = g.search_points_connectivity(adjacency_list)
-    elif args.function == "search-component-strong-connectivity":
-        result = g.search_component_strong_connectivity(adjacency_list)
-    elif args.function == "read-file":
-        result = f'The adjacency list of graph: {adjacency_list}'
-    else:
-        parser.error("Unknown command")
+    match(args.function):
+        case "search-bridges":
+            result = g.search_bridges(adjacency_list)
+        case"search-component-connectivity":
+            result = g.search_component_connectivity(adjacency_list)
+        case "search-points-connectivity":
+            result = g.search_points_connectivity(adjacency_list)
+        case "search-component-strong-connectivity":
+            result = g.search_component_strong_connectivity(adjacency_list)
+        case "read-file":
+            result = f'The adjacency list of graph: {adjacency_list}'
+        case "represent-graph":
+            graph = nx.Graph(adjacency_list)
+
+            graph_options = {
+                'node_color': '#07c2db',
+                'edge_color': '#400080',
+                'with_labels': True,
+                'font_weight': 'bold',
+                'node_size': 350,
+                'width': 4
+            }
+
+            nx.draw_kamada_kawai(graph, **graph_options)
+            plt.savefig("graph.png")
+
+            result = 'Graph was represented in new file "graph.png"'
+        case _:
+            parser.error("Unknown command")
 
     print(f'Result: {result}')
 

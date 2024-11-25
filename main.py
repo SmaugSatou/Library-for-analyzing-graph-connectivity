@@ -10,8 +10,10 @@ def main():
     """
     Demonstration main function
     """
+
     parser = argparse.ArgumentParser(description="Library for analyzing graph connectivity")
     parser.add_argument("function", choices=[
+        "read-file",
         "search-bridges",
         "search-component-connectivity",
         "search-points-connectivity",
@@ -41,6 +43,8 @@ def main():
         result = g.search_points_connectivity(adjacency_list)
     elif args.function == "search-component-strong-connectivity":
         result = g.search_component_strong_connectivity(adjacency_list)
+    elif args.function == "read-file":
+        result = f'The adjacency list of graph: {adjacency_list}'
     else:
         parser.error("Unknown command")
 

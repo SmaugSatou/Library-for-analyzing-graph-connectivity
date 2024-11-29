@@ -218,7 +218,7 @@ def search_component_connectivity(adjacency_list: dict[int, list[int]] | None = 
     """
 
     if orientation_check(adjacency_list):
-        return "Graph should be undirected"
+        return "Graph should be undirected."
 
     closed = []
     component = []

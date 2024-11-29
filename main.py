@@ -21,13 +21,13 @@ def main():
         "search-component-connectivity",
         "search-points-connectivity",
         "search-component-strong-connectivity",
-        "represent-graph"
     ], help="Functions to perform")
 
     parser.add_argument("graph_file", type=str, help="Path to the CSV file containing the vertices")
     parser.add_argument("--directed", action="store_true", help="Define if the graph is directed")
     parser.add_argument("--output", type=str,
                         help="Path to save the graph adjacency list as a file", default=None)
+    parser.add_argument("--show", action="store_true", help="Define if the png file will be made")
 
     args = parser.parse_args()
 
@@ -50,24 +50,27 @@ def main():
             result = g.search_component_strong_connectivity(adjacency_list)
         case "read-file":
             result = f'The adjacency list of graph: {adjacency_list}'
-        case "represent-graph":
-            graph = nx.Graph(adjacency_list)
-
-            graph_options = {
-                'node_color': '#07c2db',
-                'edge_color': '#400080',
-                'with_labels': True,
-                'font_weight': 'bold',
-                'node_size': 350,
-                'width': 4
-            }
-
-            nx.draw_kamada_kawai(graph, **graph_options)
-            plt.savefig("graph.png")
-
-            result = 'Graph was represented in new file "graph.png"'
         case _:
             parser.error("Unknown command")
+
+    graph = nx.Graph(adjacency_list)
+
+    if args.directed:
+        graph = nx.DiGraph(adjacency_list)
+
+    graph_options = {
+        'node_color': '#07c2db',
+        'edge_color': '#400080',
+        'with_labels': True,
+        'font_weight': 'bold',
+        'node_size': 350,
+        'width': 4
+    }
+
+    nx.draw_kamada_kawai(graph, **graph_options)
+    plt.savefig("graph.png")
+
+    result = 'Graph was represented in new file "graph.png"'
 
     print(f'Result: {result}')
 

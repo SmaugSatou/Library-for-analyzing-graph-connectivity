@@ -7,7 +7,7 @@ from copy import deepcopy
 def convert_to_adjacency_list(
         vertices: list[tuple[int, int]], is_directed: bool
 ) -> dict[int, list[int]]:
-    """Converts a list of edges into an adjacency list for an undirected graph.
+    """Converts a list of edges into an adjacency list for a graph.
 
     Args:
         vertices (list[tuple[int, int]]): The list of edges.

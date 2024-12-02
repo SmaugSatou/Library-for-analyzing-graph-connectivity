@@ -142,29 +142,34 @@ Each team member is responsible for implementing specific functionality.
 
 ### __dfs (Vladyslav Danylyshyn)
 - **Description:**  
-  Explain the purpose of your function.
+  Implementing an essential algorithms of our project. The algorithm goes through the specified graph and returns vertices that occured during iteration.
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+  `adjacency_list`: (dict[int, list[int]]): A dictionary that contains vectors of vertices. The variable represents graph.
+  `node`: int: The vertice you are staring with.
+  `visited`: set: A hashset of already visited vertices.
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  The funcition returns a hashset of visited vertices during iteration. 
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  First of all we check if there is the `visited` variable specified. If not, it becomes an empty set.
+  Then we check if the node we are starting with is contained by `visited`. If no, we add it to `visited` and go to the next vertice our `node` is bound with.
+  By iterating so, we will get a set, composed with seen vertices.
 
 ### search_points_connectivity (Vladyslav Danylyshyn)
 - **Description:**  
-  Explain the purpose of your function.
+  The function searchs for point of connectivity inside the graph using the DFS algorithm. 
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+  `adjacency_list`: (dict[int, list[int]]): A dictionary that contains vectors of vertices. The variable represents graph.
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  The function returns the hashset with all point of connectivity in graps.
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  First of all we check whether graphis undirected. If not, we stop function immediately. We grab all vertices that the DFS algorithm can reach to and initialize the output hashmap. Then we choose a node that should be deleted from graph(using for loop), delete it and its connections with other vertices. After we check if our DFS algorith can reach all vertices becides our deleted vertice. If not, it is a point of connectivity.
+  So, we iterate in that way during the end of the graph and `output` set.  
 
 ### convert_to_adjacency_list (Roman Prokhorov)
 - **Description:**  

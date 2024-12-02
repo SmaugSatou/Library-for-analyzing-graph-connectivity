@@ -115,29 +115,30 @@ Each team member is responsible for implementing specific functionality.
 
 ### orientation_check (Anton Deputat)
 - **Description:**  
-  Explain the purpose of your function.
+  Checks if graph is oriented.
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+   - `adjacency_list` (dict[int, list[int]]): A dictionary representing the adjacency list of the graph where each key represents a vertex and its corresponding value is a list of vertices that are connected to it by an edge.
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  True if graph is oriented, False if not oriented
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  It takes each element in adjacency list and all of its connections, then searches if the connected vertices have this element as their connection
 
 ### search_component_connectivity (Anton Deputat)
 - **Description:**  
-  Explain the purpose of your function.
+  The function determines all components connectivity in a graph. It identifies vertices that have nonoriented connected components, where there is a path between any pair of vertices within the same component.
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+  - `adjacency_list` (dict[int, list[int]]): A dictionary representing the adjacency list of the graph where each key represents a vertex and its corresponding value is a list of vertices that are connected to it by an edge.
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  - `list[int]`: A list containing the smallest vertices of each connected component.
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  My function uses deph-first search(dfs) to search all components. It checks if graph is not oriented, then takes each element in adjacency list and if the element is in closed it ignores it otherwise does dfs for it and apends minimal element to component.
+     
 
 ### __dfs (Vladyslav Danylyshyn)
 - **Description:**  

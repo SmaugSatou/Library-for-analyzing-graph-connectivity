@@ -11,11 +11,12 @@ import networkx as nx
 import graph as g
 
 def random_color() -> str:
-    """ Return random color.
+    """ Returns random color.
 
     Returns:
         str: random color.
     """
+
     return f'#{random.randint(0, 255):02x}{random.randint(0, 255):02x}{random.randint(0, 255):02x}'
 
 def color_nodes(graph: (nx.Graph | nx.DiGraph), \
@@ -24,6 +25,7 @@ def color_nodes(graph: (nx.Graph | nx.DiGraph), \
 
     Args:
         graph (nx.Graph  |  nx.DiGraph): The graph.
+        node_colors (list[str]): All colors of each node.
         nodes_to_color (list[int]  |  set[int]): The nodes to be colored.
     """
 
@@ -59,6 +61,7 @@ def main():
         print(err)
         return
 
+    adjacency_list = {key: sorted(value) for key, value in sorted(adjacency_list.items())}
     result = ''
 
     graph = nx.DiGraph(adjacency_list) if args.directed else nx.Graph(adjacency_list)

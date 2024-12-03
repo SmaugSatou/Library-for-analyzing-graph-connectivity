@@ -114,7 +114,7 @@ Each team member is responsible for implementing specific functionality.
 - **Algorithm:**  
   If graph is oriented, function returns empty list. If not:
 
-  First, it uses function search_component_connectivity to create list which represents all components of connectivity. Then goes through adjacency list, takes   point (then called note) and goes through its list where are points, connected to note. Then function removes point from note's list and removes note from point's list. Function search_component_connectivity is used again to new adjacency list. If amount of components of connectivity increases, this edge is bridge and appended to list of bridges if this bridge is not in list yet.
+  First, it uses function search_component_connectivity to create list which represents all components of connectivity. Then goes through adjacency list, takes   point (then called node) and goes through its list where are points, connected to node. Then function removes point from node's list and removes node from point's list. Function search_component_connectivity is used again to new adjacency list. If amount of components of connectivity increases, this edge is bridge and edge is appended to list of bridges if this bridge is not in list yet.
 
 ### orientation_check (Anton Deputat)
 - **Description:**  

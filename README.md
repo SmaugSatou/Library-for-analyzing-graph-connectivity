@@ -106,14 +106,14 @@ Each team member is responsible for implementing specific functionality.
   Finds all bridges - edges of graph, which icrease amount of components of connectivity when edges are removed
 
 - **Input:**  
-  Undirected graph represented as an adjacency list
+  Undirected graph represented as an adjacency list - dictionary, where key is point and value is list of points, connected to key point
 
 - **Output:**  
   List of tuples, where each tuple represents bridge
 
 - **Algorithm:**  
-  Function is very simple:
-  First, it uses function search_component_connectivity to create list which represents all components of connectivity. Then goes through adjacency list, takes   point (then called note) and goes through its list where are points, connected to note. Then function removes point from note's list and removes note from point's list. Function search_component_connectivity is used again to new adjacency list. If amount of components of connectivity increases, this edge is bridge and appended to list of bridges if this bridge is not in list yet
+  If graph is oriented, function returns empty list. If not:
+  First, it uses function search_component_connectivity to create list which represents all components of connectivity. Then goes through adjacency list, takes   point (then called note) and goes through its list where are points, connected to note. Then function removes point from note's list and removes note from point's list. Function search_component_connectivity is used again to new adjacency list. If amount of components of connectivity increases, this edge is bridge and appended to list of bridges if this bridge is not in list yet.
 
 ### orientation_check (Anton Deputat)
 - **Description:**  

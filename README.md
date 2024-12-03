@@ -76,29 +76,30 @@ Each team member is responsible for implementing specific functionality.
 
 ### read_file (Zakhar Veresniuk)
 - **Description:**  
-  Explain the purpose of your function.
+  Reads a csv file with given graph vertices.
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+  Expected CSV file with given vertices(e.g. 1,2)
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  Returns the result of function convert_to_adjastency_list() which is a dictionary where key is vertice 1 and value are vertices which are connected to given.
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  Simply read every line in csv file, split it by comma, then checks if the graph is oriented or not, and then creates a dictionary based on the orientation info.
 
 ### write_file (Zakhar Veresniuk)
 - **Description:**  
-  Explain the purpose of your function.
+  Simply convert given dictionary to split vertices and then writes it down in CSV file
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+  1) The path to the file you want to write vertices in
+  2) The given dictionary you want to convert in vertices
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  Returns True if file written successfully
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  Checks if vertices are in the set that we created, if not we write it in file, if it is just skip this vertice.
 
 ### search_bridges (Yarema Mykhasiak)
 - **Description:**  

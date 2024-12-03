@@ -103,16 +103,17 @@ Each team member is responsible for implementing specific functionality.
 
 ### search_bridges (Yarema Mykhasiak)
 - **Description:**  
-  Explain the purpose of your function.
+  Finds all bridges - edges of graph, which icrease amount of components of connectivity when edges are removed
 
 - **Input:**  
-  Describe the expected input format, such as the structure of the data (e.g., a graph represented as an adjacency list, a CSV file, etc.) and any specific requirements (e.g., directed or undirected graph).
+  Undirected graph represented as an adjacency list
 
 - **Output:**  
-  Explain the output, including the format of the result (e.g., a list of bridges, a dictionary of connected components, etc.).
+  List of tuples, where each tuple represents bridge
 
 - **Algorithm:**  
-  Explain how the function works, step by step.
+  Function is very simple:
+  First, it uses function search_component_connectivity to create list which represents all components of connectivity. Then goes through adjacency list, takes   point (then called note) and goes through its list where are points, connected to note. Then function removes point from note's list and removes note from point's list. Function search_component_connectivity is used again to new adjacency list. If amount of components of connectivity increases, this edge is bridge and appended to list of bridges if this bridge is not in list yet
 
 ### orientation_check (Anton Deputat)
 - **Description:**  

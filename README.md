@@ -237,3 +237,7 @@ pip install matplotlib networkx
 ```
 
 The script is flexible and customizable through command-line options, making it suitable for various graph analysis tasks.
+
+## Feedback
+
+It was very interesting and useful experience. We deepened our knowledge in theory of graphs. Also, we used our programming skills in practical field and gained experience in working in teams. We want to say 'Thanks' to assistences, who helped us to make this project and wish good luck for future students of UCU, who will have same project as we had.
